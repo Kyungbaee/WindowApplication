@@ -16,7 +16,7 @@ bool vkKeys[256];
 
 // 상수
 const wchar_t CLASS_NAME[] = L"WinMain";
-const wchar_t APP_TITLE[] = L"Hello World";
+const wchar_t APP_TITLE[] = L"Hello World by: Kim KyungBae";
 const int WINDOW_WIDTH = 400;
 const int WINDOW_HEIGHT = 300;
 
@@ -192,4 +192,14 @@ bool CreateMainWindow(HINSTANCE hInstance, int nCmdShow) {
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
     return true;
+}
+
+// 뮤텍스 사용
+bool AnotherInstance() {
+    HANDLE ourMutex;
+    ourMutex = CreateMutex(NULL, true, L"Use_a_different_string_here_for_each_program_48161-XYZZY");
+
+    if (GetLastError() == ERROR_ALREADY_EXISTS)
+        return true;
+    return false;
 }
