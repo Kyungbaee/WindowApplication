@@ -93,6 +93,13 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
+
+    case WM_CHAR:
+        switch (wParam) {
+        case ESC_KEY:   // 프로그램 종료 키
+            PostQuitMessage(0); // 프로그램 종료
+            return 0;
+        }
     /*
     case WM_CHAR:
         switch (wParam) {
@@ -183,7 +190,20 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 bool CreateMainWindow(HWND &hwnd, HINSTANCE hInstance, int nCmdShow) {
+    // 전체 화면 또는 창 화면을 설정
+    DWORD style;
+    if (FULLSCREEN)
+        style = WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
+    else
+        style = WS_OVERLAPPEDWINDOW;
     
+    if (!FULLSCREEN) {  // 창 화면일 경우
+        // 윈도우 크기를 조절해 클라이언트 영역이 GAME_WIDTH * GAME_HEIGHT가 되게 한다.
+        RECT clientRect;
+        GetClientRect(hwnd, &clientRect);   // 윈도우에 대한 클라이언트 영역의 크기 가져옴
+        // MoveWindow ( 윈도우 핸들, 왼쪽, 위쪽, 오른쪽, 아래쪽, 윈도우 다시 그리기 )
+        MoveWindow(hwnd, 0, 0, GAME_WIDTH + (GAME_WIDTH - clientRect.right), GAME_HEIGHT + (GAME_HEIGHT - clientRect.bottom), TRUE);
+    }
     // Window 클래스 구조체를 메인 윈도우에 대한 매개변수로 채움
     WNDCLASSEX wcx;
     // HWND hwnd;
@@ -207,7 +227,7 @@ bool CreateMainWindow(HWND &hwnd, HINSTANCE hInstance, int nCmdShow) {
     hwnd = CreateWindow(
         CLASS_NAME,     // 윈도우 클래스의 이름
         GAME_TITLE,      // 제목 표시줄의 텍스트
-        WS_OVERLAPPEDWINDOW,    //윈도우 스타일
+        style,    //윈도우 스타일
         CW_USEDEFAULT,      // 윈도우의 기본 수평 위치
         CW_USEDEFAULT,      // 윈도우의 기본 수직 위치
         GAME_WIDTH,       // 윈도우의 폭

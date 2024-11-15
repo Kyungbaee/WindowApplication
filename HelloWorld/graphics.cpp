@@ -81,7 +81,7 @@ void Graphics::initD3Dpp()
         d3dpp.BackBufferWidth   = width;
         d3dpp.BackBufferHeight  = height;
         if(fullscreen)                                  // 전체화면 구성이라면,
-            d3dpp.BackBufferFormat  = D3DFMT_X8R8G8B8;  // 24 비트 색상
+            d3dpp.BackBufferFormat  = D3DFMT_X8R8G8B8;  // 픽셀당 투명성이 없는 24 비트 색상
         else
             d3dpp.BackBufferFormat  = D3DFMT_UNKNOWN;   // 데스크톱 설정 사용
         d3dpp.BackBufferCount   = 1;
